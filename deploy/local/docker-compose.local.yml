@@ -5,6 +5,8 @@ services:
     build:
       context: ../../services/core
       dockerfile: build/local/Dockerfile
+    depends_on:
+      - mongo
     ports:
       - "3001:3001"
 
@@ -16,3 +18,13 @@ services:
       - "3000:3000"
     volumes:
       - "../../services/web-client:/app"
+
+  mongo:
+    image: mongo:6.0.2
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongo:/data/db"
+
+volumes:
+  mongo: {}
