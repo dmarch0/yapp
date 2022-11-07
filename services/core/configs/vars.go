@@ -4,7 +4,7 @@ import "os"
 
 type Config struct {
 	HTTPServerConfig *HTTPServerConfig
-	MongoDBConfig    *MongoDBConfig
+	PostgreSQLConfig *PostgreSQLConfig
 }
 
 type HTTPServerConfig struct {
@@ -12,7 +12,7 @@ type HTTPServerConfig struct {
 	CookieSecret string
 }
 
-type MongoDBConfig struct {
+type PostgreSQLConfig struct {
 	Uri string
 }
 
@@ -27,8 +27,8 @@ func GetConfig() *Config {
 			Endpoint:     getEnv("HTTP_ENDPOINT", ":3001"),
 			CookieSecret: getEnv("COOKIE_SECRET", "ThisIsNotSecret"),
 		},
-		MongoDBConfig: &MongoDBConfig{
-			Uri: getEnv("MONGO_URI", "mongodb://mongo:27017"),
+		PostgreSQLConfig: &PostgreSQLConfig{
+			Uri: getEnv("MONGO_URI", "postgresql://admin:admin@postgres:5432/yapp"),
 		},
 	}
 	return config
