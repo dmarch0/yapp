@@ -8,7 +8,10 @@ import (
 
 func Start() {
 	c := context.Background()
-	dbConnection := db.ConnectToDb(&c)
+
+	dbConnection := db.ConnectToDb(c)
 	defer dbConnection.Close(c)
+	db.InitTables(c)
+
 	server.StartServer()
 }
