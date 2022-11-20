@@ -8,7 +8,12 @@ import (
 )
 
 func AddUserEndpoints(router fiber.Router) {
-	router.Post("/login", controllers.PostLoginController)
+	router.Post(
+		"/login",
+		scheme_validation.ValidateBody[scheme_validation.PostLoginBody](),
+		controllers.PostLoginController,
+	)
+
 	router.Get("/login", controllers.GetLoginController)
 
 	router.Post(
@@ -16,4 +21,5 @@ func AddUserEndpoints(router fiber.Router) {
 		scheme_validation.ValidateBody[scheme_validation.PostRegisterBody](),
 		controllers.PostRegisterController,
 	)
+
 }

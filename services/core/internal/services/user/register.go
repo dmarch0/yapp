@@ -9,24 +9,34 @@ import (
 )
 
 type RegisterUserResult struct {
-	Success bool `json:"success"`
+	Success bool   `json:"success"`
+	Error   string `json:"error"`
 }
 
-type PostRegisterProps scheme_validation.PostRegisterBody
+type RegisterUserProps scheme_validation.PostRegisterBody
 
-func RegisterUser(ctx context.Context, props *PostRegisterProps) RegisterUserResult {
+func RegisterUser(ctx context.Context, props *RegisterUserProps) RegisterUserResult {
 	connection := db.GetDbConnection()
+	hash, hash_err := crypt.HashPassword(props.Password)
+	if hash_err != nil {
+		return RegisterUserResult{
+			Success: false,
+			Error:   hash_err.Error(),
+		}
+	}
+
 	_, err := connection.Exec(ctx, `
 		INSERT INTO users(email, password)
 		VALUES(
 			$1,
 			$2
 		);
-	`, props.Email, crypt.HashPassword(props.Password))
+	`, props.Email, hash)
 	if err != nil {
 		log.Println("Error inserting new user", err)
 		return RegisterUserResult{
 			Success: false,
+			Error:   err.Error(),
 		}
 	}
 

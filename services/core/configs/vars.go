@@ -1,6 +1,10 @@
 package configs
 
-import "os"
+import (
+	"os"
+
+	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
+)
 
 type Config struct {
 	HTTPServerConfig *HTTPServerConfig
@@ -25,7 +29,7 @@ func GetConfig() *Config {
 	config = &Config{
 		HTTPServerConfig: &HTTPServerConfig{
 			Endpoint:     getEnv("HTTP_ENDPOINT", ":3001"),
-			CookieSecret: getEnv("COOKIE_SECRET", "ThisIsNotSecret"),
+			CookieSecret: getEnv("COOKIE_SECRET", encryptcookie.GenerateKey()),
 		},
 		PostgreSQLConfig: &PostgreSQLConfig{
 			Uri: getEnv("MONGO_URI", "postgresql://admin:admin@postgres:5432/yapp"),
