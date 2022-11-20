@@ -6,8 +6,21 @@ requirements:
 * docker
 * docker compose
 
-run
+### To run background services
+
 ```
 cd deploy/local
-docker-compose -f docker-compose.local.yml up --build
+./run-background.sh
 ```
+
+### To run backend
+
+```
+cd deploy/local
+./run-backend.sh
+```
+
+TODO:
+1. Add ignored local compose file
+2. Add api doc
+3. Better error handling on backend
