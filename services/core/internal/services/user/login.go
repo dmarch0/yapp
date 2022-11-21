@@ -15,13 +15,7 @@ type UserData struct {
 	Id string `json:"id"`
 }
 
-type LoginUserResult struct {
-	Success bool     `json:"success"`
-	Data    UserData `json:"data"`
-	Error   string   `json:"error"`
-}
-
-func LoginUser(ctx context.Context, props *LoginUserProps) (LoginUserResult, string) {
+func LoginUser(ctx context.Context, props *LoginUserProps) (error, string, UserData) {
 	connection := db.GetDbConnection()
 
 	var password_hash []byte
@@ -29,18 +23,12 @@ func LoginUser(ctx context.Context, props *LoginUserProps) (LoginUserResult, str
 	connection.QueryRow(ctx, `SELECT password, id FROM users WHERE email=$1`, props.Email).Scan(&password_hash, &id)
 	err := bcrypt.CompareHashAndPassword(password_hash, []byte(props.Password))
 	if err != nil {
-		return LoginUserResult{
-			Success: false,
-			Error:   err.Error(),
-		}, ""
+		return err, "", UserData{}
 	}
 	token := crypt.GenerateToken(16)
 	_, deleteError := connection.Exec(ctx, `DELETE FROM user_tokens WHERE user_id=$1`, id)
 	if deleteError != nil {
-		return LoginUserResult{
-			Success: false,
-			Error:   deleteError.Error(),
-		}, ""
+		return err, "", UserData{}
 	}
 	_, tokenError := connection.Exec(ctx, `
 		INSERT INTO user_tokens(user_id, token)
@@ -50,16 +38,8 @@ func LoginUser(ctx context.Context, props *LoginUserProps) (LoginUserResult, str
 		);
 	`, id, token)
 	if tokenError != nil {
-		return LoginUserResult{
-			Success: false,
-			Error:   tokenError.Error(),
-		}, ""
+		return err, "", UserData{}
 	}
 
-	return LoginUserResult{
-		Success: true,
-		Data: UserData{
-			Id: id,
-		},
-	}, token
+	return nil, token, UserData{id}
 }
