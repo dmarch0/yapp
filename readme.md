@@ -21,6 +21,5 @@ cd deploy/local
 ```
 
 TODO:
-1. Add ignored local compose file
-2. Add api doc
-3. Better error handling on backend
+1. Add api doc
+2. Better error handling on backend
