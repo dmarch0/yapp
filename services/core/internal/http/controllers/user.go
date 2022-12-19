@@ -19,7 +19,7 @@ func PostLoginController(ctx *fiber.Ctx) error {
 		return ctx.Status(401).Next()
 	}
 
-	err, token, user_data := user.LoginUser(ctx.Context(), props)
+	token, user_data, err := user.LoginUser(ctx.Context(), props)
 	if err != nil {
 		return ctx.Status(401).JSON(PostLoginResult{
 			Success: false,

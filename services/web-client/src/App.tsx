@@ -1,10 +1,12 @@
 import React from 'react';
+import { RecoilRoot } from 'recoil'
+import Router from './components/Router/Router';
 
 function App() {
   return (
-    <div>
-      Hello
-    </div>
+    <RecoilRoot>
+      <Router />
+    </RecoilRoot>
   );
 }
 
