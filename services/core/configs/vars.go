@@ -12,8 +12,9 @@ type Config struct {
 }
 
 type HTTPServerConfig struct {
-	Endpoint     string
-	CookieSecret string
+	Endpoint      string
+	CookieSecret  string
+	AllowedOrigin string
 }
 
 type PostgreSQLConfig struct {
@@ -28,8 +29,9 @@ func GetConfig() *Config {
 	}
 	config = &Config{
 		HTTPServerConfig: &HTTPServerConfig{
-			Endpoint:     getEnv("HTTP_ENDPOINT", ":3001"),
-			CookieSecret: getEnv("COOKIE_SECRET", encryptcookie.GenerateKey()),
+			Endpoint:      getEnv("HTTP_ENDPOINT", ":3001"),
+			CookieSecret:  getEnv("COOKIE_SECRET", encryptcookie.GenerateKey()),
+			AllowedOrigin: getEnv("ALLOWED_ORIGIN", "http://localhost:3000"),
 		},
 		PostgreSQLConfig: &PostgreSQLConfig{
 			Uri: getEnv("MONGO_URI", "postgresql://admin:admin@postgres:5432/yapp"),

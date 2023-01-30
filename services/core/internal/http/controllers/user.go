@@ -35,7 +35,6 @@ func PostLoginController(ctx *fiber.Ctx) error {
 
 	return ctx.Status(200).JSON(PostLoginResult{
 		Success: true,
-		Error:   err.Error(),
 		Data:    user_data,
 	})
 }
