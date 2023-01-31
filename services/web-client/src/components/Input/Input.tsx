@@ -1,14 +1,19 @@
 import React, { ChangeEventHandler } from 'react';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 
-interface Props {
-    onChange: ChangeEventHandler<HTMLInputElement>
+type UncontrolledInputProps<T extends FieldValues> = {
+    register: UseFormRegister<T>,
 }
 
-const Input: React.FunctionComponent<Props> = (props) => {
-    const { onChange } = props;
-    return (
-        <input onChange={onChange}/>
-    )
+type ControlledInputProps = {
+    onChange: ChangeEventHandler<HTMLInputElement>,
+    value: string,
 }
+
+type InputProps<T = void> = T extends FieldValues ? UncontrolledInputProps<T> : ControlledInputProps
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => (
+    <input ref={ref} {...props} />
+  ));
 
 export default Input;
