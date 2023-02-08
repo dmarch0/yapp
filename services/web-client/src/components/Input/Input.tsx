@@ -1,19 +1,53 @@
-import React, { ChangeEventHandler } from 'react';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
+import React, { useMemo } from 'react';
+import type { InputProps } from './Input.types';
 
-type UncontrolledInputProps<T extends FieldValues> = {
-    register: UseFormRegister<T>,
-}
+function Input<T>(props: InputProps<T>, ref: React.ForwardedRef<HTMLInputElement>) {
+    const { label } = props;
 
-type ControlledInputProps = {
-    onChange: ChangeEventHandler<HTMLInputElement>,
-    value: string,
-}
+    const inputProps = useMemo(() => {
+        if ("register" in props) {
+            const formProps = props.register(props.name);
+            if (ref) {
+                formProps.ref = (el) => {
+                    ref = el;
+                    formProps.ref(el);
+                }
+            }
+            return formProps;
+        }
 
-type InputProps<T = void> = T extends FieldValues ? UncontrolledInputProps<T> : ControlledInputProps
+        if ("onChange" in props) {
+            const { 
+                onChange, 
+                value,
+             } = props;
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => (
-    <input ref={ref} {...props} />
-  ));
+            return {
+                onChange,
+                value,
+                ref,
+            }
+        }
 
-export default Input;
+        return {};
+    }, [props]);
+
+    if (label) {
+        return (
+            <label>
+                {label}
+                <input {...inputProps}/>
+            </label>
+        )
+    }
+
+    return (
+        <input {...inputProps} />
+    )
+};
+
+type ExportAssertionType = <T>(
+    props: InputProps<T> & { ref?: React.ForwardedRef<HTMLInputElement>  }
+) => ReturnType<typeof Input>;
+
+export default React.forwardRef(Input) as ExportAssertionType;
