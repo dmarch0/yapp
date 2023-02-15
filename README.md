@@ -1,4 +1,4 @@
-# Yet another pet project
+# Pet project powered by Golang, PostgreSQL and React
 
 ## How to run locally
 

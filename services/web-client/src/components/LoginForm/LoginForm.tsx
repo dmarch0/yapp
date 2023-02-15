@@ -5,6 +5,7 @@ import styles from './LoginForm.module.scss';
 import Joi from 'joi';
 import { Input } from 'components/Input';
 import type { FormValues } from './LoginForm.types';
+import { Button } from 'components/Button';
 
 const LoginSchema = Joi.object<FormValues>({
     email: Joi.string().email({ tlds: { allow: false } }).required(),
@@ -18,8 +19,13 @@ const LoginForm: React.FunctionComponent = () => {
 
     return (
         <div className={styles.wrapper}>
-            <Input<FormValues> register={register} name="email"/>
-            <Input<FormValues> register={register} name="password"/>
+            <form>
+                <Input<FormValues> register={register} name="email"/>
+                <Input<FormValues> register={register} name="password"/>
+                <Button>
+                    less go
+                </Button>
+            </form>
         </div>
     )
 }
