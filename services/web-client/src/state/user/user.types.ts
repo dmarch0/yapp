@@ -1,5 +1,11 @@
+import {AxiosResponse} from "axios";
+
+export interface PostLoginResponse {
+    data: UserState,
+}
+
 export interface UserActions {
-    login(props: LoginProps): Promise<void>
+    login(props: LoginProps): Promise<AxiosResponse<PostLoginResponse>>
 }
 
 export interface User {

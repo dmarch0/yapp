@@ -7,7 +7,7 @@ import type { ControlCallback, RedirectCallback } from "./withAccessControl.type
 export default function withAccessControl(Component: React.FunctionComponent, controlCallback: ControlCallback, redirectCallback: RedirectCallback): React.FunctionComponent {
     return (props) => {
         const user = useRecoilValue(userState);
-        
+        console.log('USER', user);
         if (!controlCallback(user)) {
             return <Navigate to={redirectCallback(user)} />
         }
